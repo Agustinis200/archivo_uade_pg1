@@ -1,0 +1,1178 @@
+###################
+# Contrasenas
+###################
+
+def contar_mayusculas_recursivo(cadena, index=0, count=0):
+    if index == len(cadena):
+        return count
+    elif cadena[index].isupper():
+        count += 1
+    return contar_mayusculas_recursivo(cadena, index + 1, count)
+
+while True:
+    try:
+        contraseña = input("Ingrese una contraseña (o ENTER para salir): ")
+
+        if contraseña == "":
+            continuar = False
+        else:
+            if not contraseña[0].isalpha():
+                raise ValueError("La contraseña debe comenzar con un carácter alfabético.")
+
+            if contar_mayusculas_recursivo(contraseña) < 2:
+                raise ValueError("La contraseña debe contener al menos dos letras mayúsculas.")
+
+            print("Contraseña válida.")
+            continuar = True
+
+    except ValueError as e:
+        print(f"Error: {e}")
+        continuar = True
+
+    if not continuar:
+        break
+
+###################
+# Conjunto Recursivo
+###################
+
+import random
+
+def crearConjuntoAleatorio():
+    conj = set()
+    numeroAleatorio = random.randint(0, 1000)
+    while numeroAleatorio != 0:
+        conj.add(numeroAleatorio)
+        numeroAleatorio = random.randint(0, 1000)
+
+    return conj
+
+def eliminarValores(conj,cont):
+
+    if conj == set():
+        return print(cont)
+
+    conj.pop()
+    cont += 1
+
+    return eliminarValores(conj, cont)
+
+###################
+# Pantalla Numerica
+###################
+
+cont = 0
+conjuntoAleatorio = crearConjuntoAleatorio()
+eliminarValores(conjuntoAleatorio, cont)
+
+import random
+
+elementos = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, '#', '*']
+matriz = [[0] * 3 for _ in range(4)]
+for f in range(4):
+    for c in range(3):
+        longitud = len(elementos) - 1
+        numAleatorio = random.randint(0, longitud)
+        elementoAleatorio = elementos.pop(numAleatorio)
+        matriz[f][c]=elementoAleatorio
+
+
+for _ in matriz:
+    print(*_)
+    # for c in range(3):
+
+###################
+# Filtrar Palabras
+###################
+
+caracteres_no_deseados = ["!", '"', "#", "$", "%", "&", "/", "(", ")", "=", "?", "'", "¿", "¡", "|", "°", "¬", "\\", "@", ";", ",", ":",
+                          ".", "-", "_", "´",
+                          "¨", "+", "*", "{", "[", "}", "]", "`", "~", "^", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "á", "é",
+                          "í", "ó", "ú", "ä", "ë", "ï", "ö", "ü"]
+lista_palabras = []
+frecuencia_palabras = []
+
+archivo_texto = None  # Inicializar la variable
+
+try:
+    archivo_texto = open("RUTA_ACA", mode="rt", encoding="utf-8")
+
+    for linea in archivo_texto:
+
+        palabras_separadas = linea.split()
+
+        for palabra in palabras_separadas:
+
+            palabra_limpia = palabra  # Inicializar aquí
+            palabra_modificada = False
+
+            for caracter in caracteres_no_deseados:
+
+                if caracter in palabra:
+                    palabra_limpia = palabra.replace(caracter, "")
+                    palabra_modificada = True
+
+            palabra_limpia = palabra_limpia.lower()
+
+            if palabra_limpia not in lista_palabras and len(palabra_limpia) > 3:
+                lista_palabras.append(palabra_limpia)
+                frecuencia_palabras.append(1)
+
+            elif palabra_limpia in lista_palabras:
+                posicion = lista_palabras.index(palabra_limpia)
+                frecuencia_palabras[posicion] += 1
+
+    for i in range(len(frecuencia_palabras)):
+        for j in range(i + 1, len(frecuencia_palabras)):
+
+            if frecuencia_palabras[i] > frecuencia_palabras[j]:
+                aux_frecuencia = frecuencia_palabras[i]
+                frecuencia_palabras[i] = frecuencia_palabras[j]
+                frecuencia_palabras[j] = aux_frecuencia
+
+                aux_palabra = lista_palabras[i]
+                lista_palabras[i] = lista_palabras[j]
+                lista_palabras[j] = aux_palabra
+
+    for i in range(len(lista_palabras) - 1):
+        for j in range(i + 1, len(lista_palabras) - 1):
+
+            if len(lista_palabras[i]) > len(lista_palabras[j]) and frecuencia_palabras[i] == frecuencia_palabras[j]:
+
+                aux_palabra = lista_palabras[i]
+                lista_palabras[i] = lista_palabras[j]
+                lista_palabras[j] = aux_palabra
+
+            elif frecuencia_palabras[i] != frecuencia_palabras[j]:
+                break
+
+    for i in range(len(lista_palabras)):
+        print(lista_palabras[i], frecuencia_palabras[i])
+except FileNotFoundError:
+    print("No se encontro el archivo, asegurate de que la ruta sea la correcta")
+finally:
+        archivo_texto.close()
+
+###################
+# Ejercicio: Crear y llenar una matriz con números impares y pares
+###################
+
+def crear_matriz(tamano=3):
+    return [[0] * tamano for _ in range(tamano)]
+
+def rellenar_matriz():
+    numero_impar = 1
+    numero_par = 2
+
+    for fila in range(len(matriz)):
+        for columna in range(len(matriz[0])):
+            if fila % 2 == 0:
+                matriz[fila][columna] = numero_impar
+                numero_impar += 2
+            else:
+                matriz[fila][columna] = numero_par
+                numero_par += 2
+
+    return
+
+def imprimir_matriz():
+    for fila in range(len(matriz)):
+        for columna in range(len(matriz[0])):
+            print("%2d" % matriz[fila][columna], end=" ")
+        print()
+
+def aplanar_matriz(x, y, tamano):
+    if len(matriz_aplanada) == len(matriz) * tamano:
+        return matriz_aplanada
+    else:
+        matriz_aplanada.append(matriz[x][y])
+
+    if y == tamano - 1:
+        y = 0
+        return aplanar_matriz(x + 1, y, tamano)
+    else:
+        return aplanar_matriz(x, y + 1, tamano)
+
+tamano = 4
+matriz_aplanada = []
+
+matriz = crear_matriz(tamano)
+rellenar_matriz()
+imprimir_matriz()
+aplanar_matriz(0, 0, tamano)
+print(matriz_aplanada)
+
+###################
+# Ejercicio: Extraer datos de clientes y listar deudores
+###################
+
+def extraer_datos(cliente):
+    lista_linea = cliente.split(';')
+    numero_cuenta = lista_linea[0]
+    nombre = lista_linea[1]
+    valores = lista_linea[2:]
+    saldo_final = sum(float(valor) for valor in valores)
+    dato_final = str(numero_cuenta) + ';' + str(nombre) + ';' + str(saldo_final)
+    return dato_final
+
+def listar_deudores():
+    archivo_deudores = open('archivonuevo.txt', 'r', encoding='utf8')
+    lista_deudores = []
+    for linea in archivo_deudores:
+        lista_linea = linea.split(';')
+        saldo = lista_linea[2]
+        if float(saldo) < 0:
+            lista_deudores.append(linea.rstrip('\n'))
+    lista_deudores_ordenada = sorted(lista_deudores, key=lambda x: float(x.split(";")[2]))
+    return lista_deudores_ordenada
+
+
+archivo_entrada = open('datos.txt', 'r', encoding='utf8')
+archivo_salida = open('archivonuevo.txt', 'a', encoding='utf8')
+for linea in archivo_entrada:
+    extraccion = extraer_datos(linea)
+    archivo_salida.write(extraccion + "\n")
+archivo_entrada.close()
+archivo_salida.close()
+
+lista_deudores = listar_deudores()
+print(lista_deudores)
+
+###################
+# Ejercicio: Verificar si un número es oblongo
+###################
+
+es_oblongo = lambda numero: True if (numero == 0 or (
+        numero > 0 and numero == ((numero // (numero ** 0.5)) * (numero // (numero ** 0.5) + 1)))) else False
+
+numero_ingresado = int(input("Ingrese un número entero (-1 para salir): "))
+while numero_ingresado != -1:
+    if es_oblongo(numero_ingresado):
+        print(f"{numero_ingresado} es oblongo.")
+    else:
+        print(f"{numero_ingresado} no es oblongo.")
+
+    numero_ingresado = int(input("Ingrese un número entero (-1 para salir): "))
+
+###################
+# Ejercicio: Crear y verificar un Sudoku
+###################
+
+import random
+
+def crear_sudoku():
+    # crear matriz
+    sudoku = [[0] * 9 for _ in range(9)]
+
+    # Rellenar matriz
+    for fila in range(9):
+        for columna in range(9):
+            numero_random = random.randint(1, 9)
+            sudoku[fila][columna] = numero_random
+
+    return sudoku
+
+def imprimir_sudoku(sudoku):
+    for fila in sudoku:
+        print(fila)
+    print()
+
+def es_valido(sudoku):
+    # Verificar filas
+    for fila in sudoku:
+        if len(set(fila)) != 9:
+            return False
+
+    # Verificar columnas
+    for col in range(9):
+        columna = [fila[col] for fila in sudoku]
+        if len(set(columna)) != 9:
+            return False
+
+    # Verificar subcuadros de 3x3
+    for i in range(0, 9, 3):
+        for j in range(0, 9, 3):
+            subcuadro = []
+            for k in range(3):
+                for l in range(3):
+                    subcuadro.append(sudoku[i + k][j + l])
+            if len(set(subcuadro)) != 9:
+                return False
+
+    return True
+
+sudoku = crear_sudoku()
+imprimir_sudoku(sudoku)
+if es_valido(sudoku):
+    print("Sudoku armado correctamente")
+else:
+    print("No está armado correctamente este sudoku")
+
+###################
+# Ejercicio: Detección y agrupación de anagramas
+# Parte 1
+###################
+
+def limpiar_palabra(palabra):
+    # Convertir la palabra a minúsculas y eliminar caracteres no alfabéticos
+    palabra_limpia = ''.join(letra for letra in palabra if 'a' <= letra <= 'z').lower()
+    return palabra_limpia
+
+def detectar_anagramas(ruta_archivo):
+    # Leer el archivo
+    with open(ruta_archivo, 'r', encoding='utf-8') as archivo_texto:
+        contenido = archivo_texto.read()
+
+    # Limpiar y dividir las palabras
+    palabras = contenido.split()
+    palabras_limpias = [limpiar_palabra(palabra) for palabra in palabras]
+
+    # Agrupar palabras por sus anagramas
+    anagramas = {}
+    for palabra in palabras_limpias:
+        clave = ''.join(sorted(palabra))
+        if clave in anagramas:
+            anagramas[clave].append(palabra)
+        else:
+            anagramas[clave] = [palabra]
+
+    # Filtrar solo las agrupaciones con más de un anagrama
+    grupos_anagramas = [grupo for grupo in anagramas.values() if len(grupo) > 1]
+
+    # Ordenar los grupos por la cantidad de anagramas
+    grupos_anagramas.sort(key=len)
+
+    # Imprimir los anagramas agrupados
+    for grupo in grupos_anagramas:
+        print(", ".join(sorted(set(grupo))))
+
+# Ruta del archivo
+ruta_archivo = "ruta/del/archivo.txt"
+detectar_anagramas(ruta_archivo)
+
+###################
+# Ejercicio: Generar matriz con patrón concéntrico
+# Parte 2
+###################
+
+def generar_matriz_concentrica(n):
+    matriz = [[0] * n for _ in range(n)]
+    num_actual = 1
+    capas = (n + 1) // 2
+
+    for capa in range(capas):
+        for i in range(capa, n - capa):
+            matriz[capa][i] = num_actual
+            num_actual += 1
+        for i in range(capa + 1, n - capa):
+            matriz[i][n - capa - 1] = num_actual
+            num_actual += 1
+        for i in range(n - capa - 2, capa - 1, -1):
+            matriz[n - capa - 1][i] = num_actual
+            num_actual += 1
+        for i in range(n - capa - 2, capa, -1):
+            matriz[i][capa] = num_actual
+            num_actual += 1
+
+    return matriz
+
+def imprimir_matriz(matriz):
+    for fila in matriz:
+        print(" ".join(f"{num:2d}" for num in fila))
+
+n = int(input("Ingrese el tamaño de la matriz (N x N): "))
+matriz = generar_matriz_concentrica(n)
+imprimir_matriz(matriz)
+
+
+###################
+# Ejercicio: Validación de contraseña
+###################
+
+def contar_mayusculas_recursivo(texto, indice=0, contador=0):
+    if indice == len(texto):
+        return contador
+    elif texto[indice].isupper():
+        contador += 1
+    return contar_mayusculas_recursivo(texto, indice + 1, contador)
+
+
+while True:
+    try:
+        password = input("Ingrese una contraseña (o ENTER para salir): ")
+
+        if password == "":
+            continuar = False
+        else:
+            if not password[0].isalpha():
+                raise ValueError("La contraseña debe comenzar con un carácter alfabético.")
+
+            if contar_mayusculas_recursivo(password) < 2:
+                raise ValueError("La contraseña debe contener al menos dos letras mayúsculas.")
+
+            print("Contraseña válida.")
+            continuar = True
+
+    except ValueError as error:
+        print(f"Error: {error}")
+        continuar = True
+
+    if not continuar:
+        break
+
+
+###################
+# Ejercicio: Análisis de Demanda de Productos
+###################
+
+def producto_mayor_demanda(ventas_producto):
+    meses_demanda = [0] * 12
+    for descripcion, mes, cantidad in ventas_producto:
+        producto = "El artículo " + descripcion + " demuestra una mayor demanda en el mes de "
+        meses_demanda[int(mes) - 1] += int(cantidad)
+    mes_mayor_demanda = obtener_mes_con_mayor_demanda(meses_demanda)
+    mes_nombre = obtener_nombre_mes(mes_mayor_demanda)
+    return producto + mes_nombre
+
+
+def obtener_mes_con_mayor_demanda(meses_demanda):
+    mes_mayor = 0
+    demanda_maxima = max(meses_demanda)
+    for indice in range(len(meses_demanda)):
+        if demanda_maxima == meses_demanda[indice]:
+            mes_mayor = indice
+    return mes_mayor
+
+
+def obtener_nombre_mes(mes):
+    nombres_meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+                     "Noviembre", "Diciembre"]
+    return nombres_meses[mes]
+
+
+# Ejercicio: Análisis de Demanda de Productos
+try:
+    diccionario_ventas = {}
+    lista_articulos = []
+    archivo_pedidos = open('pedidos.txt')
+    for linea in archivo_pedidos:
+        sku, descripcion, fecha, cantidad = linea.split(';')
+        cantidad = int(cantidad)
+        mes = fecha.split("/")[1]
+        lista_articulos.append(sku)
+        if sku not in diccionario_ventas:
+            diccionario_ventas[sku] = [[descripcion] + [mes] + [cantidad]]
+        else:
+            diccionario_ventas[sku] += [[descripcion] + [mes] + [cantidad]]
+
+    conjunto_articulos = set(lista_articulos)  # Para quitar repetidos
+    lista_articulos = list(conjunto_articulos)
+    lista_articulos.sort()
+
+    print()
+    for sku, ventas in diccionario_ventas.items():
+        diccionario_ventas[sku] = producto_mayor_demanda(ventas)
+    for articulo in lista_articulos:
+        print(diccionario_ventas[articulo])
+    print()
+
+except FileNotFoundError as error:
+    print("Error al abrir el archivo:", error)
+except OSError as error:
+    print("Error fatal:", error)
+finally:
+    try:
+        archivo_pedidos.close()
+    except NameError:
+        pass
+
+###################
+# Ejercicio: Encontrar la Secuencia Ascendente Más Larga
+###################
+
+import random
+
+
+def encontrar_secuencia_mas_larga(lista_numeros):
+    secuencia_actual = []
+    secuencia_mas_larga = []
+
+    for numero in lista_numeros:
+        if not secuencia_actual or numero >= secuencia_actual[-1]:
+            secuencia_actual.append(numero)
+        else:
+            if len(secuencia_actual) > len(secuencia_mas_larga):
+                secuencia_mas_larga = secuencia_actual.copy()
+            secuencia_actual = [numero]
+
+    if len(secuencia_actual) > len(secuencia_mas_larga):
+        secuencia_mas_larga = secuencia_actual.copy()
+
+    return secuencia_mas_larga
+
+
+# Ejercicio: Encontrar la Secuencia Ascendente Más Larga
+tamaño_lista = int(input("Ingrese un número entero positivo N: "))
+lista_numeros = [random.randint(0, 15000) for _ in range(tamaño_lista)]
+
+print("Lista generada:", lista_numeros)
+
+secuencia_larga = encontrar_secuencia_mas_larga(lista_numeros)
+promedio_secuencia = sum(secuencia_larga) / len(secuencia_larga)
+
+print("Secuencia ordenada más larga:", secuencia_larga)
+print("Promedio de la secuencia:", promedio_secuencia)
+
+
+
+
+
+##################
+# Libreria Archivos
+# Recursivoi conjuntos
+##################
+
+
+def productoMayorDemanda(ventas):
+    meses = [0]*12
+    for desc, mes,cant in ventas:
+        producto = "El articulo " + desc + " demuestra una mayor demanda en el mes de "
+        meses[int(mes)-1] += int(cant)
+    mayorMes = getMayorMes(meses)
+    mesString = getMes(mayorMes)
+    return producto + mesString
+
+def getMayorMes(meses):
+    mayorMes = 0
+    maxMes = max(meses)
+    for i in range(len(meses)):
+        if (maxMes == meses[i]):
+            mayorMes = i
+    return mayorMes
+
+def getMes(mes):
+    meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+    return meses[mes]
+
+#Programa principal
+dic = {}
+articulos = []
+try:
+    pedidos = open('pedidos.txt')
+    for linea in pedidos:
+        sku, descripcion, fecha, cantidad = linea.split(';')
+        cantidad = int(cantidad)
+        mes = fecha.split("/")[1]
+        articulos.append(sku)
+        if sku not in dic:
+            dic[sku] = [[descripcion] + [mes] + [cantidad]]
+        else:
+            dic[sku] += [[descripcion] + [mes] + [cantidad]]
+    articulosConjunto = set(articulos) #para quitar repetidos
+    articulos = list(articulosConjunto)
+    articulos.sort()
+
+    print()
+    for sku,ventas in dic.items():
+        dic[sku] = productoMayorDemanda(ventas)
+    for articulo in articulos:
+        print(dic[articulo])
+    print()
+except FileNotFoundError as error:
+    print("Error al abrir el archivo:", error)
+except OSError as error:
+    print("Error fatal:", error)
+finally:
+    try:
+        pedidos.close()
+    except NameError:
+        pass
+
+
+def printLengthWithRecursive(conjunto, longitud = 0):
+    try:
+        conjunto.pop()
+        printLengthWithRecursive(conjunto,longitud+1)
+    except KeyError as error:
+        print(longitud)
+    except RecursionError:
+        print("Error, se excedió el limite de recursiones posibles. El conjunto puede tener 997 o más.")
+
+#Programa principal
+setTest = set([45, 72, 89, 39, 5, 15, 95, 25])
+setCopy = setTest
+printLengthWithRecursive(setCopy)
+
+
+#########################
+# Recursividad Vocales - Mail
+#########################
+
+
+def obtener_vocales_unicas(palabra, indice=0, vocales=set()):
+    if indice == len(palabra):
+        return list(vocales)
+    else:
+        letra = palabra[indice].lower()
+        if letra in "aeiou":
+            vocales.add(letra)
+        return obtener_vocales_unicas(palabra, indice + 1, vocales)
+
+palabra = input("Ingrese una palabra: ")
+vocales_unicas = obtener_vocales_unicas(palabra)
+
+print("Vocales únicas:", vocales_unicas)
+
+
+
+#Previo EJ2 Archivo Mails Paises
+mails_invalidos = []
+paises = {}
+try:
+    archivo = open("correos.txt","r")
+    for linea in archivo:
+        lineasinsalto=linea.strip("\n")
+        validez = True
+        lineasinsalto=lineasinsalto.lower()
+        if "@" not in linea:
+            validez = False
+        if lineasinsalto.count("@") > 1:
+            validez = False
+        pos = lineasinsalto.find("@")
+        nombre = lineasinsalto[:pos]
+        if nombre.isalnum() == False:
+            validez = False
+        pos_dominio = lineasinsalto.find(".")
+        dominio = lineasinsalto[pos+1:pos_dominio]
+        if len(dominio) < 1:
+            validez = False
+
+        if validez:
+            pais = lineasinsalto[-3:]
+            print(pais)
+            if pais not in paises:
+                paises[pais] = 1
+            else:
+                paises[pais] += 1
+
+        else:
+            mails_invalidos.append(lineasinsalto)
+
+except OSError as mensaje:
+    print(mensaje)
+finally:
+    try:
+        archivo.close()
+    except NameError:
+        pass
+
+total = 0
+for mail in mails_invalidos:
+    total += 1
+paises['USA'] = paises.pop('com')
+print("La cantidad de mail invalidos es: ",total)
+total = 0
+print(paises)
+
+##########################
+# Archivos Mayor Menor Listado - Raiz recursiva
+##########################
+
+def raiz_cuadrada_aproximativa(n, min_val=0, max_val=0):
+    if max_val == 0:
+        max_val = n
+
+    medio = (min_val + max_val) / 2
+    cuadrado_medio = medio ** 2
+
+    if abs(cuadrado_medio - n) <= 0.0001:
+        return medio
+    elif cuadrado_medio < n:
+        return raiz_cuadrada_aproximativa(n, medio, max_val)
+    else:
+        return raiz_cuadrada_aproximativa(n, min_val, medio)
+
+n = int(input("Ingrese un número natural: "))
+raiz_aproximada = raiz_cuadrada_aproximativa(n)
+print(f"La raíz cuadrada aproximada de {n} es: {raiz_aproximada:.4f}")
+
+
+##################
+# LISTA GRABAR ARCHIVO - COMPRENSION RECURSIVA
+#################
+
+import random
+
+def generarnumeros(n):
+    lista = []
+    for i in range(n):
+        azar = random.randint(0, n**2)
+        lista.append(azar)
+    return lista
+
+# Programa Principal
+try:
+    n = int(input("Ingrese un numero: "))
+    listaazar = generarnumeros(n)
+    print(listaazar)
+
+    salida = open("archivo.txt", "wt")
+    k = 0
+    numerosporlinea = 0
+    for numero in listaazar:
+        if numerosporlinea< 10:
+            salida.write(str(numero) + ";")
+            numerosporlinea +=1
+        else:
+            salida.write("\n")
+            numerosporlinea = 0
+        k = k + 1
+    if numerosporlinea > 0:
+        salida.write("\n")
+except FileNotFoundError as mensaje:
+    print("No se puede abrir el archivo:", mensaje)
+except OSError as mensaje:
+    print("Error:", mensaje)
+else:
+    print("Copia finalizada. Lineas copiadas:", k)
+finally:
+    try:
+        salida.close()
+    except NameError:
+        pass
+
+#Lista tope lista base
+
+def triangulo(lista):
+    if len(lista) == 1:
+        return [lista]
+    else:
+        copia = lista.copy()
+
+        def sumas(copia):
+            if len(copia) == 1:
+                return []
+            else:
+                suma = [copia[0] + copia[1]]
+                copia.pop(0)
+                return suma + sumas(copia)
+
+        sumatoria = sumas(copia)
+        return [lista] + triangulo(sumatoria)
+
+listaoriginal = [1, 2, 3, 4, 5]
+resultado = triangulo(listaoriginal)
+for nivel in resultado:
+    print(nivel)
+
+
+##############
+# Sufragio
+##############
+
+while True:
+    try:
+        diccionarioPartidos = {}
+        diccionarioPartidosAlianzas = {}
+        totalVotos = 0
+        totalVotosAlianza = 0
+        listaVotosPartidos = []
+        listaVotosAlianza = []
+        partidoMasVotado = ""
+
+        archivo = open("Resultados.txt", "rt")
+        linea = archivo.readline()
+
+        while linea:
+            linea = linea.rstrip("\n")
+
+            if linea not in diccionarioPartidosAlianzas:
+                diccionarioPartidosAlianzas[linea] = 0
+
+            diccionarioPartidosAlianzas[linea] += 1
+
+
+            partido = linea.split(";")
+            if partido[0] not in diccionarioPartidos:
+                diccionarioPartidos[partido[0]] = 0
+            else:
+                diccionarioPartidos[partido[0]] += 1
+
+
+            linea = archivo.readline()
+
+        # Lista todos los partidos
+        for clave in diccionarioPartidos:
+            totalVotos += diccionarioPartidos[clave]
+
+        for clave in diccionarioPartidos:
+            listaVotosPartidos.append(diccionarioPartidos[clave])
+
+        listaVotosPartidos.sort(reverse=True)
+
+        for clave in diccionarioPartidos:
+            if diccionarioPartidos[clave] == listaVotosPartidos[0]:
+                partidoMasVotado = clave
+                break
+
+        print("El total de votos es:")
+        partido = ""
+
+        for i in range(len(listaVotosPartidos)):
+            porcentaje = listaVotosPartidos[i]*100/totalVotos
+            cantAsteriscos = listaVotosPartidos[i]*100//totalVotos
+
+            for clave in diccionarioPartidos:
+                if diccionarioPartidos[clave] == listaVotosPartidos[i]:
+                    partido = clave
+
+            print(f"{partido:<30} | {'':*<{cantAsteriscos}} {porcentaje:<2.2f} %")
+        print()
+
+        # El partido más votado y sus alianzas
+
+        print(f"El total de votos por alianza de {partidoMasVotado}: ")
+
+        nombre = ""
+        alianza = ""
+
+        for clave in diccionarioPartidosAlianzas:
+            nombre, alianza = clave.split(";")
+
+            if nombre == partidoMasVotado:
+                totalVotosAlianza += diccionarioPartidosAlianzas[clave]
+
+        for clave in diccionarioPartidosAlianzas:
+            nombre, alianza = clave.split(";")
+
+            if nombre == partidoMasVotado:
+                listaVotosAlianza.append(diccionarioPartidosAlianzas[clave])
+
+        listaVotosAlianza.sort(reverse=True)
+
+        for i in range(len(listaVotosAlianza)):
+            porcentaje = listaVotosAlianza[i]*100/totalVotosAlianza
+            cantAsteriscos = listaVotosAlianza[i]*100//totalVotosAlianza
+
+            for clave in diccionarioPartidosAlianzas:
+                if diccionarioPartidosAlianzas[clave] == listaVotosAlianza[i]:
+                    claveEnLista = clave.split(";")
+                    nombre, alianza = claveEnLista
+
+            print(f"Alianza {alianza:<30} | {'':*<{cantAsteriscos}} {porcentaje:<2.2f} %")
+
+
+        break
+
+    except KeyboardInterrupt as mensaje:
+        print("Error inesperado: ", mensaje)
+
+    finally:
+        try:
+            archivo.close()
+        except NameError:
+            pass
+
+#Parte 2
+
+#FinalPrevio 2022 - ARCHIVOS RECURSIVIDAD - AÑOS BISIESTOS LAMBDA FILTER o LISTAS POR COMPRENSION
+
+es_bisiesto = lambda year: year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
+
+inicio = int(input("Ingrese el año de inicio: "))
+fin = int(input("Ingrese el año de fin: "))
+
+bisiestos = [year for year in range(inicio, fin + 1) if es_bisiesto(year)]
+
+print(f"Años bisiestos entre {inicio} y {fin}: {bisiestos}")
+
+
+#########################
+# Direccion Municipal de Transito - Recursividad Promedio
+#########################
+
+
+def obtener_infracciones():
+    lista_infracciones = []
+    try:
+        with open('Patentes.txt', 'r') as archivo:
+            linea = archivo.readline()
+            while linea != '':
+                try:
+                    datos_infraccion = linea.split(";")
+                    infraccion = {
+                        'patente': datos_infraccion[0],
+                        'titular': datos_infraccion[1],
+                        'monto': int(datos_infraccion[2].strip())
+                    }
+                    lista_infracciones.append(infraccion)
+                except (IndexError, ValueError) as e:
+                    print(f"Error al procesar la línea: {linea}. Error: {e}")
+                linea = archivo.readline()
+    except FileNotFoundError:
+        print("Error: El archivo 'Patentes.txt' no fue encontrado.")
+    except IOError:
+        print("Error: Hubo un problema al leer el archivo.")
+    return lista_infracciones
+
+def mostrar_deuda_vehiculo(infracciones):
+    print('Patente'.ljust(12), 'Monto', sep="")
+    for i in range(len(infracciones)):
+        j = 0
+        contado = False
+        while not contado and j < i:
+            if infracciones[j]['patente'] == infracciones[i]['patente']:
+                contado = True
+            else:
+                j += 1
+        if not contado:
+            monto_total = infracciones[i]['monto']
+            k = i + 1
+            while k < len(infracciones):
+                if infracciones[k]['patente'] == infracciones[i]['patente']:
+                    monto_total += infracciones[k]['monto']
+                k += 1
+            print(infracciones[i]['patente'].ljust(12), str(monto_total), sep="")
+
+def mostrar_deuda_titular(infracciones):
+    print('Titular'.ljust(20), 'Monto', sep="")
+    for i in range(len(infracciones)):
+        j = 0
+        contado = False
+        while not contado and j < i:
+            if infracciones[j]['titular'] == infracciones[i]['titular']:
+                contado = True
+            else:
+                j += 1
+        if not contado:
+            monto_total = infracciones[i]['monto']
+            k = i + 1
+            while k < len(infracciones):
+                if infracciones[k]['titular'] == infracciones[i]['titular']:
+                    monto_total += infracciones[k]['monto']
+                k += 1
+            print(infracciones[i]['titular'].ljust(20), str(monto_total), sep="")
+
+def mostrar_vehiculos_titular(infracciones):
+    titulares_vehiculos = []
+    print('Titular'.ljust(20), 'Cantidad de vehículos', sep="")
+    for i in range(len(infracciones)):
+        j = 0
+        contado = False
+        while not contado and j < i:
+            if infracciones[j]['titular'] == infracciones[i]['titular']:
+                contado = True
+            else:
+                j += 1
+        if not contado:
+            vehiculos = [infracciones[i]['patente']]
+            k = i + 1
+            while k < len(infracciones):
+                if (infracciones[k]['titular'] == infracciones[i]['titular']
+                        and infracciones[k]['patente'] not in vehiculos):
+                    vehiculos.append(infracciones[i]['patente'])
+                k += 1
+            titulares_vehiculos.append({
+                'titular': infracciones[i]['titular'],
+                'cantidad_vehiculos': len(vehiculos)
+            })
+    ordenar_vehiculos_desc(titulares_vehiculos)
+    for titular in titulares_vehiculos:
+        print(titular['titular'].ljust(20), str(titular['cantidad_vehiculos']), sep="")
+
+def ordenar_vehiculos_desc(titulares_vehiculos):
+    i = 0
+    ordenado = False
+    while not ordenado and i < len(titulares_vehiculos):
+        ordenado = True
+        for j in range(len(titulares_vehiculos) - i - 1):
+            if titulares_vehiculos[j]['cantidad_vehiculos'] < titulares_vehiculos[j + 1]['cantidad_vehiculos']:
+                ordenado = False
+                titulares_vehiculos[j], titulares_vehiculos[j + 1] = titulares_vehiculos[j + 1], titulares_vehiculos[j]
+        i += 1
+
+try:
+    lista_infracciones = obtener_infracciones()
+    mostrar_deuda_vehiculo(lista_infracciones)
+    print()
+    mostrar_deuda_titular(lista_infracciones)
+    print()
+    mostrar_vehiculos_titular(lista_infracciones)
+except Exception as e:
+    print(f"Se produjo un error inesperado: {e}")
+
+
+####################
+# Harry potter
+####################
+
+# Final Previo 2023 Abril Archivos
+def modificar_palabra(lista_palabras):
+    contador_vocales = 0
+    vocales_minúsculas = ['a', 'e', 'i', 'o', 'u']
+    vocales_mayúsculas = ['A', 'E', 'I', 'O', 'U']
+    for indice_palabra in range(len(lista_palabras)):
+        contador_vocales = 0
+        longitud_palabra = len(lista_palabras[indice_palabra])
+        for letra in range(longitud_palabra):
+            if lista_palabras[indice_palabra][letra] in vocales_minúsculas or lista_palabras[indice_palabra][letra] in vocales_mayúsculas:
+                contador_vocales += 1
+                if contador_vocales > longitud_palabra / 2:
+                    palabra_modificada = "(" + lista_palabras[indice_palabra] + ")"
+                    lista_palabras[indice_palabra] = palabra_modificada
+
+    return lista_palabras
+
+try:
+    archivo_entrada = open("harry.txt", 'r')
+    contenido = ''
+    for linea in archivo_entrada:
+        lista_palabras = linea.split(" ")
+        nueva_linea = modificar_palabra(lista_palabras)
+        palabras_linea = " ".join(nueva_linea)
+        contenido += palabras_linea + "\n"
+except FileNotFoundError as error:
+    print("El archivo no se ha encontrado:", error)
+except OSError as error:
+    print("No se pudo abrir el archivo:", error)
+finally:
+    try:
+        archivo_entrada.close()
+    except NameError:
+        pass
+
+try:
+    archivo_salida = open("harrymod.txt", 'w')
+    archivo_salida.write(contenido.strip("\n"))
+except OSError as error:
+    print("No se pudo escribir en el archivo:", error)
+finally:
+    try:
+        archivo_salida.close()
+    except NameError:
+        pass
+
+# Final Previo 2023 - Archivos - Número Primo Lambda
+es_primo = lambda num: num > 1 and all(num % i != 0 for i in range(2, int(num ** 0.5) + 1))
+
+numero = int(input("Ingrese un número entero (-1 para salir): "))
+while numero != -1:
+    if es_primo(numero):
+        print(f"{numero} es primo.")
+    else:
+        print(f"{numero} no es primo.")
+
+    numero = int(input("Ingrese otro número entero (-1 para salir): "))
+
+
+##########################
+# Archivos Mercaderia
+##########################
+
+import random
+
+"""Creación de datos"""
+def generar_datos_mercaderia():
+    lista_productos = ['Tijera Escolar', 'Resma papel', 'Lápiz negro', 'Lapicera azul', 'Liquid paper']
+    dia = random.randint(1, 31)
+    dia_formato = str(dia).zfill(2)
+    mes = random.randint(1, 31)
+    mes_formato = str(mes).zfill(2)
+    anio = random.randint(2002, 2023)
+    producto = random.choice(lista_productos)
+    producto_formato = producto.ljust(20, ' ')
+    cantidad = random.randint(1, 300)
+    precio_entero = random.randint(1, 999)
+    precio_decimal = random.randint(1, 99)
+    precio_decimal_formato = str(precio_decimal).zfill(2)
+    precio_final = f"{precio_entero}.{precio_decimal_formato}"
+    precio_formato = str(precio_final).zfill(6)
+    cantidad_formato = str(cantidad).zfill(3)
+    return str(dia_formato), str(mes_formato), str(anio), str(producto_formato), cantidad_formato, str(precio_formato)
+
+
+def retornar_registro():
+    lista_tipos = [1, 2]
+    tipo_elegido = random.choice(lista_tipos)
+    if tipo_elegido == 1:
+        registro_compra = generar_compra(dia, mes, anio, producto, cantidad, precio)
+        tipo_registro = registro_compra
+    elif tipo_elegido == 2:
+        registro_venta = generar_venta(dia, mes, anio, producto, cantidad, precio)
+        tipo_registro = registro_venta
+    return tipo_registro
+
+
+def generar_compra(dia, mes, anio, producto, cantidad, precio):
+    datos_compra = f"{dia} {mes} {anio} {producto}{cantidad} {precio}"
+    return datos_compra
+
+
+def generar_venta(dia, mes, anio, producto, cantidad, precio):
+    datos_venta = f"{dia} {mes} {anio} {cantidad} {producto}{precio}"
+    return datos_venta
+
+
+def generar_listado_stock():
+    lista_productos = []
+    productos_stock = []
+    with open("compraventa.txt", mode="r") as archivo:
+        for linea in archivo:
+            cantidad_caracteres = linea[11:14]
+            if cantidad_caracteres.isalpha():
+                producto = linea[11:31]
+            else:
+                producto = linea[15:35]
+            if producto not in lista_productos:
+                lista_productos.append(producto)
+
+    for producto in lista_productos:
+        stock = 0
+        with open("compraventa.txt", mode="r") as archivo:
+            for linea in archivo:
+                cantidad_caracteres = linea[11:14]
+                if cantidad_caracteres.isalpha():
+                    producto_linea = linea[11:31]
+                    if producto_linea == producto:
+                        stock += int(linea[31:33])
+                else:
+                    producto_linea = linea[15:35]
+                    if producto_linea == producto:
+                        stock -= int(linea[11:13])
+        productos_stock.append([producto, stock])
+
+    for i in range(len(productos_stock)):
+        for j in range(i + 1, len(productos_stock)):
+            if productos_stock[i][1] < productos_stock[j][1]:
+                aux = productos_stock[i]
+                productos_stock[i] = productos_stock[j]
+                productos_stock[j] = aux
+
+    print(productos_stock)
+
+
+def generar_resultado():
+    resultado_final = 0
+    with open("compraventa.txt", mode="r") as archivo:
+        for linea in archivo:
+            cantidad_caracteres = linea[11:14]
+            if cantidad_caracteres.isalpha():
+                resultado_final -= float(linea[35:40])
+            else:
+                resultado_final += float(linea[35:40])
+
+    print("El resultado es:", str(resultado_final))
+
+
+cantidad_registros = random.randint(1, 500)
+for i in range(cantidad_registros):
+    dia, mes, anio, producto, cantidad, precio = generar_datos_mercaderia()
+    registro = retornar_registro()
+    with open('compraventa.txt', 'a', encoding="utf-8") as archivo:
+        if i == 0:
+            archivo.write(registro)
+        else:
+            archivo.write("\n" + registro)
+
+generar_listado_stock()
+generar_resultado()
